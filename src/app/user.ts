@@ -6,4 +6,8 @@ export class User {
        public lastLogin?: Date,
        public password: string = ''
     ) { }
+
+    getIdAndName(): string {
+        return this.id + ": " + this.name;
+    }
 }

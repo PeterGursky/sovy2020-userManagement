@@ -1,6 +1,9 @@
 <p>users works!</p>
+<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{errorMessage}}
+</div>
 <ul>
-    <li *ngFor="let user of users">
+    <li *ngFor="let user of (users$ | async)">
         {{user.id}} {{user.name}} {{user.email}}</li>
 </ul>
 
@@ -18,4 +21,4 @@
     </tbody>
 </table>
 
-<p *ngIf="selectedUser">Selected user: {{selectedUser.name}}</p>
+<p *ngIf="selectedUser">Selected user: {{selectedUser.getIdAndName()}}</p>
