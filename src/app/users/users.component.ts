@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UsersService } from '../services/users.service';
-import { User } from '../user';
+import { User } from '../entities/user';
 
 @Component({
   selector: 'app-users',
