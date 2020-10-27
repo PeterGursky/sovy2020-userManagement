@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Auth } from '../entities/auth';
 import { UsersService } from '../services/users.service';
 
@@ -12,7 +13,8 @@ export class LoginComponent implements OnInit {
   auth = new Auth();
   errorMessage = "";
 
-  constructor(private userService: UsersService) { }
+  constructor(private userService: UsersService, 
+              private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -30,6 +32,7 @@ export class LoginComponent implements OnInit {
       success => {
         if (success) {
           console.log("Login successful");
+          this.router.navigateByUrl("/extended-users");
         } else {
           this.errorMessage="Zlý login alebo heslo";
           setTimeout(() => this.errorMessage ="", 3000);
