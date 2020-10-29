@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { EMPTY, observable, Observable, of, scheduled, Subscriber, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Auth } from '../entities/auth';
+import { Group } from '../entities/group';
 import { User } from '../entities/user';
 import { MessageService } from './message.service';
 
@@ -82,6 +83,10 @@ export class UsersService {
     );
   }
 
+  mapToUsers(usersFromServer:Array<any>):User[] {
+    return usersFromServer.map(u => new User(u.name, u.email, u.id));    
+  }
+
   getExtendedUsers(): Observable<User[]> {
     return this.http.get<Array<any>>(this.serverUrl + "users/" + this.token).pipe(
       map(usersFromServer => this.mapToExtendedUsers(usersFromServer),
@@ -89,13 +94,14 @@ export class UsersService {
     );
   }
 
-  mapToUsers(usersFromServer:Array<any>):User[] {
-    return usersFromServer.map(u => new User(u.name, u.email, u.id));    
-  }
-  
   mapToExtendedUsers(usersFromServer:Array<any>):User[] {
     return usersFromServer.map(u => new User(u.name, u.email, u.id, 
       u.lastLogin,u.active, u.groups));    
+  }
+
+  getGroups():Observable<Group[] | void> {
+    return this.http.get<Group[]>(this.serverUrl + "groups/").pipe(
+      catchError(error => this.processHttpError(error)));
   }
 
   processHttpError(error): Observable<void> {
@@ -104,9 +110,10 @@ export class UsersService {
             this.messageService.sendMessage("Server je nedostupný");
           } else {
             if (error.status >= 400 && error.status < 500) {  
-              const message = error.error.errorMessage
-                              ? error.error.errorMessage 
-                              : JSON.parse(error.error).errorMessage;
+              // const message = error.error.errorMessage 
+              //                 ? error.error.errorMessage 
+              //                 : JSON.parse(error.error).errorMessage;
+              const message = error.error.errorMessage ?? JSON.parse(error.error).errorMessage;
               this.messageService.sendMessage(message);
             } else {
               this.messageService.sendMessage("chyba servera: " + error.message);
