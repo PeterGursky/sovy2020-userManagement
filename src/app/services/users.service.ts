@@ -1,9 +1,10 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { observable, Observable, of, scheduled, Subscriber, throwError } from 'rxjs';
+import { EMPTY, observable, Observable, of, scheduled, Subscriber, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Auth } from '../entities/auth';
 import { User } from '../entities/user';
+import { MessageService } from './message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,8 @@ export class UsersService {
           new User("Jana", "janka@jano.sk", 18)];
   private serverUrl = "http://localhost:8080/";
   private loggedUserSubscriber: Subscriber<string>;
+
+  constructor(private http: HttpClient, private messageService: MessageService) { }
 
   set token(value:string) {
     if (value)
@@ -37,8 +40,6 @@ export class UsersService {
     return localStorage.getItem('user');
   }
 
-  constructor(private http: HttpClient) { }
-
   getUserObservable():Observable<string> {
     return new Observable(subscriber => {
       this.loggedUserSubscriber = subscriber;
@@ -46,19 +47,17 @@ export class UsersService {
     });
   }
 
-  login(auth:Auth): Observable<boolean> {
+  login(auth:Auth): Observable<boolean | void> {
     return this.http.post(this.serverUrl + "login", auth, {responseType: 'text'}).pipe(
       map(token => {
         this.token = token;
         this.user = auth.name;
+        this.messageService.sendMessage(`Nahlásenie používateľa ${auth.name} úspešné`,false);
         return true;
       }),
       catchError(error => {
-        if (error instanceof HttpErrorResponse && error.status === 401 ) {
-          this.logout();
-          return of(false);
-        }
-        return throwError(error);
+        this.logout();
+        return this.processHttpError(error);
       })
     );
   }
@@ -78,13 +77,15 @@ export class UsersService {
 
   getUsers(): Observable<User[]> {
     return this.http.get<Array<any>>(this.serverUrl + "users").pipe(
-      map(usersFromServer => this.mapToUsers(usersFromServer))
+      map(usersFromServer => this.mapToUsers(usersFromServer),
+      catchError(error => this.processHttpError(error)))
     );
   }
 
   getExtendedUsers(): Observable<User[]> {
     return this.http.get<Array<any>>(this.serverUrl + "users/" + this.token).pipe(
-      map(usersFromServer => this.mapToExtendedUsers(usersFromServer))
+      map(usersFromServer => this.mapToExtendedUsers(usersFromServer),
+      catchError(error => this.processHttpError(error)))
     );
   }
 
@@ -96,4 +97,25 @@ export class UsersService {
     return usersFromServer.map(u => new User(u.name, u.email, u.id, 
       u.lastLogin,u.active, u.groups));    
   }
+
+  processHttpError(error): Observable<void> {
+        if (error instanceof HttpErrorResponse) {
+          if (error.status === 0) {
+            this.messageService.sendMessage("Server je nedostupný");
+          } else {
+            if (error.status >= 400 && error.status < 500) {  
+              const message = error.error.errorMessage
+                              ? error.error.errorMessage 
+                              : JSON.parse(error.error).errorMessage;
+              this.messageService.sendMessage(message);
+            } else {
+              this.messageService.sendMessage("chyba servera: " + error.message);
+            }
+          }
+        } else {
+          this.messageService.sendMessage("Chyba programátora : " + JSON.stringify(error));
+        }
+        console.error("Chyba zo servera: ", error);
+        return EMPTY;
+      }
 }

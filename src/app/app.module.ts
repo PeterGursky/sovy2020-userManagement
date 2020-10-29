@@ -10,6 +10,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ExtendedUsersComponent } from './extended-users/extended-users.component';
+import { MessageComponent } from './message/message.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ExtendedUsersComponent } from './extended-users/extended-users.componen
     LoginComponent,
     PageNotFoundComponent,
     NavbarComponent,
-    ExtendedUsersComponent
+    ExtendedUsersComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,

@@ -14,7 +14,6 @@ export class UsersComponent implements OnInit {
           new User("Jano", "janko@jano.sk", 10)];
   selectedUser:User;
   users$: Observable<User[]>;
-  errorMessage = "";
 
   constructor(private usersService: UsersService) { }
 
@@ -25,22 +24,6 @@ export class UsersComponent implements OnInit {
       usersFromService => {
         console.log("Prišli dátat zo servera: ", usersFromService);
         this.users = usersFromService
-      },
-      error => {
-        if (error instanceof HttpErrorResponse) {
-          if (error.status === 0) {
-            this.errorMessage = "Server je nedostupný";
-          } else {
-            if (error.status >= 400 && error.status < 500) {  
-              this.errorMessage = error.error.errorMessage;
-            } else {
-              this.errorMessage = "chyba servera: " + error.message;
-            }
-          }
-        } else {
-          this.errorMessage = "Chyba programátora : " + JSON.stringify(error);
-        }
-        console.error("Chyba zo servera: ", error)
       },
       ()=> console.log("Spracovanie dát zo servera ukončené"));
   }

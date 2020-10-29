@@ -11,7 +11,6 @@ import { UsersService } from '../services/users.service';
 })
 export class LoginComponent implements OnInit {
   auth = new Auth();
-  errorMessage = "";
 
   constructor(private userService: UsersService, 
               private router: Router) { }
@@ -33,26 +32,7 @@ export class LoginComponent implements OnInit {
         if (success) {
           console.log("Login successful");
           this.router.navigateByUrl("/extended-users");
-        } else {
-          this.errorMessage="Zlý login alebo heslo";
-          setTimeout(() => this.errorMessage ="", 3000);
-        }
-      },
-      error => {
-        if (error instanceof HttpErrorResponse) {
-          if (error.status === 0) {
-            this.errorMessage = "Server je nedostupný";
-          } else {
-            if (error.status >= 400 && error.status < 500) {  
-              this.errorMessage = error.error.errorMessage;
-            } else {
-              this.errorMessage = "chyba servera: " + error.message;
-            }
-          }
-        } else {
-          this.errorMessage = "Chyba programátora : " + JSON.stringify(error);
-        }
-        console.error("Chyba zo servera: ", error)
+        } 
       } );
   }
 }
