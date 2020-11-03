@@ -95,8 +95,14 @@ export class UsersService {
   }
 
   mapToExtendedUsers(usersFromServer:Array<any>):User[] {
-    return usersFromServer.map(u => new User(u.name, u.email, u.id, 
-      u.lastLogin,u.active, u.groups));    
+    return usersFromServer.map(u => User.clone(u));    
+  }
+
+  saveUser(user:User): Observable<User | void> {
+    return this.http.post<User>(this.serverUrl + "users/" + this.token, user).pipe(
+      map(userFromServer => User.clone(userFromServer)),
+      catchError(error => this.processHttpError(error))
+    );
   }
 
   getGroups():Observable<Group[] | void> {
