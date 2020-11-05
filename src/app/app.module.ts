@@ -12,6 +12,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ExtendedUsersComponent } from './extended-users/extended-users.component';
 import { MessageComponent } from './message/message.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    FontAwesomeModule,
     AppRoutingModule
   ],
   providers: [],

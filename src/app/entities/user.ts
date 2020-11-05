@@ -19,4 +19,18 @@ export class User {
     getIdAndName(): string {
         return this.id + ": " + this.name;
     }
+
+    getSkLastLogin(): string {
+        const options = {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        };
+        return this.lastLogin
+          ? new Date(this.lastLogin).toLocaleTimeString('sk-SK', options)
+          : 'nikdy';
+      }
 }

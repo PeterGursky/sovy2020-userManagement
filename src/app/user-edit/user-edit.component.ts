@@ -19,21 +19,23 @@ export class UserEditComponent implements OnChanges {
   constructor(private usersService: UsersService) { }
 
   ngOnChanges(): void {
-    this.usersService.getGroups().subscribe(groups => {
-      this.groups.clear();
-      if (groups instanceof Array) {
-        groups.forEach( group => {
-          if (this.user.groups.findIndex(usergroup => usergroup.id === group.id) >=0) {
-            this.groups.set(group, true);
-          } else {
-            this.groups.set(group, false);
-          }
-        });
-      } 
-    });
+    if (this.user) {
+      this.usersService.getGroups().subscribe(groups => {
+        this.groups.clear();
+        if (groups instanceof Array) {
+          groups.forEach(group => {
+            if (this.user.groups.findIndex(usergroup => usergroup.id === group.id) >= 0) {
+              this.groups.set(group, true);
+            } else {
+              this.groups.set(group, false);
+            }
+          });
+        }
+      });
+    }
   }
 
-  toggleGroup(event:any, group: Group) {
+  toggleGroup(event: any, group: Group) {
     const checked = event.target.checked;
     this.groups.set(group, checked);
     if (checked) {
