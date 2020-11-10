@@ -1,0 +1,17 @@
+<h2 *ngIf="group" >{{header}} č. {{group.id}}</h2>
+<section *ngIf="group">
+    <p>Meno skupiny: <strong>{{group.name}}</strong></p>
+    <p>Oprávnenia:</p>
+    <ul>
+        <li *ngFor="let perm of group.permissions">{{perm}}</li>
+    </ul>
+</section>
+<section *ngIf="group">
+    <p><button class="btn btn-primary" routerLink="../../edit/{{group.id}}">Edituj skupinu</button></p>
+    <button class="btn btn-secondary" [routerLink]="['..', group.id - 1]">
+        predchádzajúca
+    </button>
+    <button class="btn btn-secondary" [routerLink]="['..', group.id + 1]">
+        ďalšia
+    </button>
+</section>

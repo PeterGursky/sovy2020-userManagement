@@ -117,7 +117,12 @@ export class UsersService {
       catchError(error => this.processHttpError(error)));
   }
 
-  processHttpError(error): Observable<void> {
+  getGroup(groupId: number):Observable<Group> {
+    return this.http.get<Group>(this.serverUrl + "group/" + groupId).pipe(
+      catchError(error => this.processHttpError(error)));
+  }
+
+  processHttpError(error) {
         if (error instanceof HttpErrorResponse) {
           if (error.status === 0) {
             this.messageService.sendMessage("Server je nedostupný");

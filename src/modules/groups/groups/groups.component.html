@@ -1,0 +1,6 @@
+<h2>Groups</h2>
+<ul *ngIf="groups">
+    <li *ngFor="let group of groups">
+         <a [routerLink]="['..','detail',group.id]">{{group.id}}, {{group.name}}</a>
+    </li>
+</ul>
