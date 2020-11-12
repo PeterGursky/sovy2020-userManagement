@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Group } from 'src/app/entities/group';
 import { UsersService } from 'src/app/services/users.service';
+import { faEdit, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-groups',
@@ -8,7 +9,8 @@ import { UsersService } from 'src/app/services/users.service';
   styleUrls: ['./groups.component.css']
 })
 export class GroupsComponent implements OnInit {
-
+  faEdit = faEdit;
+  faTimes = faTimes;
   groups: Group[] | void;
 
   constructor(private usersService: UsersService) { }

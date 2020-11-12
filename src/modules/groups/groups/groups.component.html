@@ -1,6 +1,9 @@
 <h2>Groups</h2>
 <ul *ngIf="groups">
     <li *ngFor="let group of groups">
-         <a [routerLink]="['..','detail',group.id]">{{group.id}}, {{group.name}}</a>
+         <a [routerLink]="['..','detail',group.id]">{{group.id}}, {{group.name}} </a>
+         <a [routerLink]="['..', 'edit', group.id]">
+            <fa-icon [icon]="faEdit"></fa-icon>
+         </a>
     </li>
 </ul>

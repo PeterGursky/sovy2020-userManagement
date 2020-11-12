@@ -121,7 +121,12 @@ export class UsersService {
     return this.http.get<Group>(this.serverUrl + "group/" + groupId).pipe(
       catchError(error => this.processHttpError(error)));
   }
-
+  
+  saveGroup(group:Group): Observable<Group> {
+    return this.http.post<Group>(this.serverUrl + "groups/" + this.token, group).pipe(
+      catchError(error => this.processHttpError(error))
+    );
+  }
   processHttpError(error) {
         if (error instanceof HttpErrorResponse) {
           if (error.status === 0) {

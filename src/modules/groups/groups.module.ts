@@ -7,12 +7,16 @@ import { GroupDetailComponent } from './group-detail/group-detail.component';
 import { GroupsMenuComponent } from './groups-menu/groups-menu.component';
 import { GroupsHomeComponent } from './groups-home/groups-home.component';
 import { GroupEditComponent } from './group-edit/group-edit.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [GroupsComponent, GroupDetailComponent, GroupsMenuComponent, GroupsHomeComponent, GroupEditComponent],
   imports: [
     CommonModule,
+    FormsModule,
+    FontAwesomeModule,
     GroupsRoutingModule
   ],
   exports: []

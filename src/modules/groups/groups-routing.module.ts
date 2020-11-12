@@ -12,7 +12,8 @@ const routes: Routes = [
       { path: '', component: GroupsHomeComponent },
       { path: 'list', component: GroupsComponent },
       { path: 'detail/:id', component: GroupDetailComponent, data: {header: "Skupina"} },
-      { path: 'edit/:id', component: GroupEditComponent }
+      { path: 'edit/:id', component: GroupEditComponent },
+      { path: 'add', component: GroupEditComponent }
     ]}
 ];
 
