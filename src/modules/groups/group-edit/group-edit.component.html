@@ -18,7 +18,7 @@
       </div>
     </div>
     <div>
-        <button type="button" class="btn btn-secondary" routerLink="../../list">Zruš</button>
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Zruš</button>
         <button type="submit" class="btn btn-primary" [disabled]="!groupForm.form.valid">Ulož</button>
     </div>
 </form>

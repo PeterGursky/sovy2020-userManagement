@@ -15,17 +15,24 @@ export class UsersService {
           new User("Jana", "janka@jano.sk", 18)];
   private serverUrl = "http://localhost:8080/";
   private loggedUserSubscriber: Subscriber<string>;
+  
+  private defaultRedirect = "/extended-users";
+  public redirectAfterLogin =  this.defaultRedirect;
+
+  public setDefaultRedirect() {
+    this.redirectAfterLogin = this.defaultRedirect;
+  }
 
   constructor(private http: HttpClient, private messageService: MessageService) { }
 
-  set token(value:string) {
+  private set token(value:string) {
     if (value)
       localStorage.setItem('token', value);
     else
       localStorage.removeItem('token');  
   }
 
-  get token() {
+  private get token() {
     return localStorage.getItem('token');
   }
 
