@@ -17,10 +17,14 @@ export class GroupDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute, private usersService: UsersService) { }
 
   ngOnInit(): void {
-    this.route.data.subscribe(data => this.header = data.header);
-    this.route.paramMap.pipe(
-        switchMap(paramMap => this.usersService.getGroup(+paramMap.get("id"))))
-        .subscribe(group => this.group = group);
+    this.route.data.subscribe(data => {
+      console.log('data dosli:' + JSON.stringify(data));
+      this.header = data.header;
+      this.group = data.group;
+    });
+    // this.route.paramMap.pipe(
+    //     switchMap(paramMap => this.usersService.getGroup(+paramMap.get("id"))))
+    //     .subscribe(group => this.group = group);
 //  this.route.paramMap.pipe(
 //      map(paramMap => paramMap.get("id")))
         // .subscribe(id => {

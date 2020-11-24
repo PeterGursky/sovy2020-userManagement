@@ -9,6 +9,7 @@ import { GroupsHomeComponent } from './groups-home/groups-home.component';
 import { GroupEditComponent } from './group-edit/group-edit.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
+import { GroupResolverService } from 'src/guards/group-resolver.service';
 
 
 @NgModule({

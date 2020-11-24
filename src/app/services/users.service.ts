@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EMPTY, observable, Observable, of, scheduled, Subscriber, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, defaultIfEmpty, map, mergeMap, tap } from 'rxjs/operators';
 import { Auth } from '../entities/auth';
 import { Group } from '../entities/group';
 import { User } from '../entities/user';
@@ -96,8 +96,8 @@ export class UsersService {
 
   getExtendedUsers(): Observable<User[]> {
     return this.http.get<Array<any>>(this.serverUrl + "users/" + this.token).pipe(
-      map(usersFromServer => this.mapToExtendedUsers(usersFromServer),
-      catchError(error => this.processHttpError(error)))
+      map(usersFromServer => this.mapToExtendedUsers(usersFromServer)),
+      catchError(error => this.processHttpError(error))
     );
   }
 
@@ -117,6 +117,25 @@ export class UsersService {
       map(_ => true),
       catchError(error => this.processHttpError(error))
     );
+  }
+
+  checkLoggedIn():Observable<boolean> {
+    if (this.user) {
+      return this.getExtendedUsers().pipe(
+        defaultIfEmpty(null),
+        tap(data => console.log("before merge", data)),
+        mergeMap(users => {
+          if (users) {
+            return of(true);
+          } else {
+            this.logout();
+            return of(false);
+          }
+        })
+      );
+    } else {
+      return of(false);
+    }
   }
 
   getGroups():Observable<Group[] | void> {
